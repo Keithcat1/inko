@@ -3,16 +3,16 @@ use crate::process::ProcessPointer;
 use crate::runtime::process::panic;
 use crate::state::State;
 use rand::rngs::StdRng;
-use rand::{Rng, SeedableRng};
+use rand::{Rng, SeedableRng, TryRngCore};
 
 #[no_mangle]
 pub unsafe extern "system" fn inko_random_int(rng: *mut StdRng) -> i64 {
-    (*rng).gen()
+    (*rng).random()
 }
 
 #[no_mangle]
 pub unsafe extern "system" fn inko_random_float(rng: *mut StdRng) -> f64 {
-    (*rng).gen()
+    (*rng).random()
 }
 
 #[no_mangle]
@@ -22,7 +22,7 @@ pub unsafe extern "system" fn inko_random_int_range(
     max: i64,
 ) -> i64 {
     if min < max {
-        (*rng).gen_range(min..max)
+        (*rng).random_range(min..max)
     } else {
         0
     }
@@ -35,7 +35,7 @@ pub unsafe extern "system" fn inko_random_float_range(
     max: f64,
 ) -> f64 {
     if min < max {
-        (*rng).gen_range(min..max)
+        (*rng).random_range(min..max)
     } else {
         0.0
     }
@@ -50,7 +50,7 @@ pub unsafe extern "system" fn inko_random_bytes(
 ) -> *mut ByteArray {
     let mut bytes = vec![0; size as usize];
 
-    if let Err(err) = (*rng).try_fill(&mut bytes[..]) {
+    if let Err(err) = (*rng).try_fill_bytes(&mut bytes[..]) {
         panic(process, &err.to_string());
     }
 

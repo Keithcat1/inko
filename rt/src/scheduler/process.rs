@@ -7,8 +7,8 @@ use crate::stack::StackPool;
 use crate::state::{RcState, State};
 use crossbeam_queue::ArrayQueue;
 use crossbeam_utils::atomic::AtomicCell;
+use rand::rng;
 use rand::rngs::ThreadRng;
-use rand::thread_rng;
 use std::cell::Cell;
 use std::cmp::min;
 use std::collections::VecDeque;
@@ -210,7 +210,7 @@ impl Thread {
             blocked_at: NOT_BLOCKING,
             blocked_nesting: 0,
             network_poller,
-            rng: thread_rng(),
+            rng: rng(),
             stacks: StackPool::new(pool.stack_size),
             action: Action::Ignore,
             pool,
@@ -227,7 +227,7 @@ impl Thread {
             blocked_at: NOT_BLOCKING,
             blocked_nesting: 0,
             network_poller,
-            rng: thread_rng(),
+            rng: rng(),
             stacks: StackPool::new(pool.stack_size),
             action: Action::Ignore,
             pool,

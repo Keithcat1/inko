@@ -5,7 +5,7 @@ use crate::network_poller::NetworkPoller;
 use crate::scheduler::process::Scheduler;
 use crate::scheduler::signal::Signals;
 use crate::scheduler::timeouts::Worker as TimeoutWorker;
-use rand::{thread_rng, Rng};
+use rand::{rng, Rng};
 use std::collections::HashMap;
 use std::env;
 use std::mem::size_of;
@@ -146,9 +146,9 @@ impl State {
         let byte_array_type =
             new_type!("ByteArray", counts.byte_array_type, ByteArray);
 
-        let mut rng = thread_rng();
-        let hash_key0 = rng.gen();
-        let hash_key1 = rng.gen();
+        let mut rng = rng();
+        let hash_key0 = rng.random();
+        let hash_key1 = rng.random();
         let environment = Env::new();
         let scheduler = Scheduler::new(
             config.process_threads as usize,
